@@ -1,0 +1,26 @@
+{
+  "name": "bvv-frontend-project-lvl3",
+  "version": "0.0.1",
+  "description": "Hexlet study project \"RSS aggregator\"",
+  "main": "src/index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.13.2"
+  },
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vbuzivskoy/frontend-project-lvl3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vbuzivskoy/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/vbuzivskoy/frontend-project-lvl3#readme"
+}
