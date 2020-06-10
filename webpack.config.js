@@ -7,6 +7,7 @@ const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'src'),
+  dist: path.join(__dirname, 'dist'),
 };
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -24,10 +25,10 @@ module.exports = {
   },
   output: {
     filename: getFilename('js'),
-    path: path.resolve(__dirname, 'dist'),
+    path: PATHS.dist,
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: PATHS.dist,
     compress: true,
     port: 9000,
   },
