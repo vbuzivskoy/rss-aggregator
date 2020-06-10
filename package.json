@@ -3,16 +3,7 @@
   "version": "0.0.1",
   "description": "Hexlet study project \"RSS aggregator\"",
   "main": "src/index.js",
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^7.1.0",
-    "eslint-config-airbnb": "^18.1.0",
-    "eslint-plugin-babel": "^5.3.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jest": "^23.13.2"
-  },
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vbuzivskoy/frontend-project-lvl3.git"
@@ -22,5 +13,33 @@
   "bugs": {
     "url": "https://github.com/vbuzivskoy/frontend-project-lvl3/issues"
   },
-  "homepage": "https://github.com/vbuzivskoy/frontend-project-lvl3#readme"
+  "homepage": "https://github.com/vbuzivskoy/frontend-project-lvl3#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.10.1",
+    "bootstrap": "^4.5.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "babel-loader": "^8.1.0",
+    "babel-polyfill": "^6.26.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.5.3",
+    "eslint": "^7.1.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.13.2",
+    "glob": "^7.1.6",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "purgecss-webpack-plugin": "^2.2.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
 }
