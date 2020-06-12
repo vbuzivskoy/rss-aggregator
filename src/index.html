@@ -7,10 +7,17 @@
   <body>
     <div class="jumbotron">
       <h1>RSS Aggregator</h1>
-      <form class="rss-feed">
-        <input name="url">
-        <input type="submit" value="Add">
+      <form id="rssFeedForm">
+        <input id="inputField" name="feedUrl">
+        <input id="submitButton" type="submit" value="Add" disabled>
+        <ul id="validationFeedback"></ul>
       </form>
+    </div>
+    <div id="rssChannelsContainer">
+      <ul id="rssChannels"></ul>
+    </div>
+    <div id="rssPostsContainer">
+      <ul id="rssPosts"></ul>
     </div>
   </body>
 </html>
