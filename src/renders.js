@@ -1,21 +1,15 @@
 export const renderRssChannels = (rssChannels) => {
   const channelsList = document.querySelector('#rssChannels');
-  channelsList.innerHTML = '';
-  rssChannels.forEach(({ title, description }) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<div class="channelTitle">${title}</div><div class="channelDescription">${description}</div>`;
-    channelsList.append(li);
-  });
+  channelsList.innerHTML = rssChannels.reduce((acc, { title, description }) => (
+    `${acc}<div class="channelContainer"><div class="channelTitle">${title}</div><div class="channelDescription">${description}</div></div>`
+  ), '');
 };
 
 export const renderRssPosts = (rssPosts) => {
   const postsList = document.querySelector('#rssPosts');
-  postsList.innerHTML = '';
-  rssPosts.forEach(({ title, link }) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<div class="post"><a href="${link}">${title}</a></div>`;
-    postsList.append(li);
-  });
+  postsList.innerHTML = rssPosts.reduce((acc, { title, link }) => (
+    `${acc}<div class="postContainer"><div class="post"><a href="${link}" target="_blank">${title}</a></div></div>`
+  ), '');
 };
 
 export const resetForm = () => {
@@ -25,12 +19,10 @@ export const resetForm = () => {
 
 export const renderValidationErrors = (validationErrors) => {
   const validationFeedback = document.querySelector('#validationFeedback');
-  validationFeedback.innerHTML = '';
-  validationErrors.forEach((errorMessage) => {
-    const li = document.createElement('li');
-    li.textContent = errorMessage;
-    validationFeedback.append(li);
-  });
+  validationFeedback.innerHTML = validationErrors
+    .reduce((acc, errorMessage) => (
+      `${acc}<div>${errorMessage}</div>`
+    ), '');
 };
 
 export const renderSubmitButton = (submitButtonStatus) => {
@@ -42,11 +34,27 @@ export const renderSubmitButton = (submitButtonStatus) => {
   }
 };
 
+export const renderSubmitButtonValue = (value) => {
+  const submitButton = document.querySelector('#submitButton');
+  submitButton.textContent = value;
+};
+
 export const renderInputField = (validationStatus) => {
   const inputField = document.querySelector('#inputField');
   if (validationStatus === 'invalid') {
-    inputField.className = validationStatus;
+    inputField.classList.add('invaild');
   } else {
-    inputField.className = '';
+    inputField.classList.remove('invaild');
   }
+};
+
+export const renderInputFieldPlaceholder = (placeholder) => {
+  const inputField = document.querySelector('#inputField');
+  inputField.removeAttribute('placeholder');
+  inputField.setAttribute('placeholder', placeholder);
+};
+
+export const renderLocaleButton = (currentLocale) => {
+  const localeDropdownMenuButton = document.querySelector('#localeDropdownMenuButton');
+  localeDropdownMenuButton.textContent = currentLocale;
 };

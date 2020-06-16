@@ -10,12 +10,12 @@ export default (rssSource) => {
       channel: {
         title: channelTitleElement.textContent,
         description: channelDescriptionElement.textContent,
-        link: channelLinkElement.textContent,
       },
       posts: postElmenets.map((item) => (
         {
           title: item.querySelector('title').textContent,
           link: item.querySelector('link').textContent,
+          guid: item.querySelector('guid').textContent,
         }
       )),
     };

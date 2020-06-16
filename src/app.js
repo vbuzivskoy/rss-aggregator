@@ -1,7 +1,8 @@
 import axios from 'axios';
 import * as yup from 'yup';
+import differenceWith from 'lodash/differenceWith';
 import parseRssFeed from './parseRssFeed';
-import watcher from './watchers';
+import watchState from './watchers';
 
 const corsProxyInit = () => {
   const corsAPIhost = 'cors-anywhere.herokuapp.com';
@@ -26,9 +27,30 @@ const getRssFeed = (url) => {
   return axios.get(url);
 };
 
+const watchNewPosts = (watchedState) => {
+  setTimeout(() => {
+    watchedState.rssChannels.forEach(({ channelUrl }) => {
+      getRssFeed(channelUrl)
+        .then((response) => {
+          const parsedRssFeedData = parseRssFeed(response.data);
+          const newPosts = differenceWith(
+            parsedRssFeedData.posts,
+            watchedState.rssPosts,
+            (A, B) => A.guid === B.guid,
+          );
+          watchedState.rssPosts.push(...newPosts);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => watchNewPosts(watchedState));
+    });
+  }, 5000);
+};
+
 const app = () => {
   const state = {
-    addFeedForm: {
+    rssFeedForm: {
       inputStatus: 'empty',
       validationStatus: 'valid',
       validationErrors: [],
@@ -36,56 +58,66 @@ const app = () => {
     },
     rssChannels: [],
     rssPosts: [],
+    currentLocale: 'ru',
   };
 
-  const watchedState = watcher(state);
+  watchState(state)
+    .then((result) => {
+      const watchedState = result;
+      const rssFeedForm = document.querySelector('#rssFeedForm');
+      const localeDropdownMenu = document.querySelector('#localeDropdownMenu');
 
-  const rssFeedForm = document.querySelector('#rssFeedForm');
-
-  const schema = yup.object().shape({
-    feedUrl: yup.string().url().required(),
-  });
-
-  rssFeedForm.addEventListener('input', (e) => {
-    watchedState.addFeedForm.inputStatus = 'typing';
-    const formData = new FormData(e.currentTarget);
-    const feedUrl = formData.get('feedUrl');
-    schema.validate({ feedUrl })
-      .then(() => {
-        watchedState.addFeedForm.validationStatus = 'valid';
-        watchedState.addFeedForm.submitButtonStatus = 'enabled';
-        watchedState.addFeedForm.validationErrors = [];
-      })
-      .catch(({ errors }) => {
-        watchedState.addFeedForm.validationStatus = 'invalid';
-        watchedState.addFeedForm.submitButtonStatus = 'disabled';
-        watchedState.addFeedForm.validationErrors = errors;
+      const schema = yup.object().shape({
+        feedUrl: yup.string().url('notURL').required('notEmpty'),
       });
-  });
-  rssFeedForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const feedUrl = formData.get('feedUrl');
-    getRssFeed(feedUrl)
-      .then((response) => {
-        const parsedRssFeedData = parseRssFeed(response.data);
+
+      rssFeedForm.addEventListener('input', (e) => {
+        watchedState.rssFeedForm.inputStatus = 'typing';
+        const formData = new FormData(e.currentTarget);
+        const feedUrl = formData.get('feedUrl');
+        schema.validate({ feedUrl })
+          .then(() => {
+            watchedState.rssFeedForm.validationStatus = 'valid';
+            watchedState.rssFeedForm.submitButtonStatus = 'enabled';
+            watchedState.rssFeedForm.validationErrors = [];
+          })
+          .catch(({ errors }) => {
+            watchedState.rssFeedForm.validationStatus = 'invalid';
+            watchedState.rssFeedForm.submitButtonStatus = 'disabled';
+            watchedState.rssFeedForm.validationErrors = errors;
+          });
+      });
+      rssFeedForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const feedUrl = formData.get('feedUrl');
         const isAlreadyAdded = state.rssChannels
-          .filter(({ link }) => link === parsedRssFeedData.channel.link)
+          .filter(({ channelUrl }) => channelUrl === feedUrl)
           .length === 1;
         if (isAlreadyAdded) {
-          watchedState.addFeedForm.validationStatus = 'invalid';
-          watchedState.addFeedForm.submitButtonStatus = 'disabled';
-          watchedState.addFeedForm.validationErrors = ['Error: That rss feed has already been added.'];
+          watchedState.rssFeedForm.validationStatus = 'invalid';
+          watchedState.rssFeedForm.submitButtonStatus = 'disabled';
+          watchedState.rssFeedForm.validationErrors = ['rssAlreadyAdded'];
         } else {
-          watchedState.addFeedForm.inputStatus = 'added';
-          watchedState.rssChannels.push(parsedRssFeedData.channel);
-          watchedState.rssPosts.push(...parsedRssFeedData.posts);
+          getRssFeed(feedUrl)
+            .then((response) => {
+              const parsedRssFeedData = parseRssFeed(response.data);
+              watchedState.rssFeedForm.inputStatus = 'added';
+              watchedState.rssFeedForm.validationErrors = [];
+              watchedState.rssChannels.push({ ...parsedRssFeedData.channel, channelUrl: feedUrl });
+              watchNewPosts(watchedState);
+            })
+            .catch(() => {
+              watchedState.rssFeedForm.validationErrors = ['networkError'];
+            });
         }
-      })
-      .catch((error) => {
-        watchedState.addFeedForm.validationErrors = [error];
       });
-  });
+
+      localeDropdownMenu.addEventListener('click', (e) => {
+        e.preventDefault();
+        watchedState.currentLocale = e.target.textContent;
+      });
+    });
 };
 
 export default app;

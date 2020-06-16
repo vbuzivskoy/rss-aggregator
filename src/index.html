@@ -6,18 +6,27 @@
   </head>
   <body>
     <div class="jumbotron">
+      <div class="dropdown float-right">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="localeDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        <div id="localeDropdownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">ru</a>
+          <a class="dropdown-item" href="#">en</a>
+        </div>
+      </div>
       <h1>RSS Aggregator</h1>
       <form id="rssFeedForm">
-        <input id="inputField" name="feedUrl">
-        <input id="submitButton" type="submit" value="Add" disabled>
-        <ul id="validationFeedback"></ul>
+        <div class="form-group">
+          <input id="inputField" class="form-control" name="feedUrl">
+        </div>
+        <div id="validationFeedback"></div>
+        <button id="submitButton" class="btn btn-primary" type="submit" disabled></button>
       </form>
     </div>
-    <div id="rssChannelsContainer">
-      <ul id="rssChannels"></ul>
-    </div>
-    <div id="rssPostsContainer">
-      <ul id="rssPosts"></ul>
+    <div class="container">
+      <div class="row">
+        <div id="rssChannels" class="col-sm"></div>
+        <div id="rssPosts" class="col-sm"></div>
+      </div>
     </div>
   </body>
 </html>
