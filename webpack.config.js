@@ -41,9 +41,9 @@ module.exports = {
       filename: getFilename('css'),
     }),
     new CleanWebpackPlugin(),
-    new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-    }),
+    // new PurgecssPlugin({
+    //   paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+    // }),
   ],
   module: {
     rules: [
