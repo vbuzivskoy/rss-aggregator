@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Hexlet study project \"RSS aggregator\"",
   "main": "src/index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "jest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vbuzivskoy/frontend-project-lvl3.git"
