@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as yup from 'yup';
 import differenceWith from 'lodash/differenceWith';
+import some from 'lodash/some';
 import parseRssFeed from './parseRssFeed';
 import watchState from './watchers';
 
@@ -95,9 +96,7 @@ const app = () => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const feedUrl = formData.get('feedUrl');
-        const isAlreadyAdded = state.rssChannels
-          .filter(({ channelUrl }) => channelUrl === feedUrl)
-          .length === 1;
+        const isAlreadyAdded = some(state.rssChannels, { channelUrl: feedUrl });
         if (isAlreadyAdded) {
           watchedState.rssFeedForm.validationStatus = 'invalid';
           watchedState.rssFeedForm.submitButtonStatus = 'disabled';
