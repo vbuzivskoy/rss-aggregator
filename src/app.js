@@ -27,7 +27,8 @@ const getRssFeed = (url) => {
   return axios.get(url);
 };
 
-const watchNewPosts = (watchedState) => {
+const watchNewPosts = (ws) => {
+  const watchedState = ws;
   setTimeout(() => {
     watchedState.rssChannels.forEach(({ channelUrl }) => {
       getRssFeed(channelUrl)
@@ -38,7 +39,10 @@ const watchNewPosts = (watchedState) => {
             watchedState.rssPosts,
             (A, B) => A.guid === B.guid,
           );
-          watchedState.rssPosts.push(...newPosts);
+          watchedState.rssPosts = [
+            ...newPosts,
+            ...watchedState.rssPosts,
+          ];
         })
         .catch((error) => {
           console.log(error);
@@ -104,7 +108,11 @@ const app = () => {
               const parsedRssFeedData = parseRssFeed(response.data);
               watchedState.rssFeedForm.inputStatus = 'added';
               watchedState.rssFeedForm.validationErrors = [];
-              watchedState.rssChannels.push({ ...parsedRssFeedData.channel, channelUrl: feedUrl });
+              watchedState.rssFeedForm.submitButtonStatus = 'disabled';
+              watchedState.rssChannels = [
+                { ...parsedRssFeedData.channel, channelUrl: feedUrl },
+                ...watchedState.rssChannels,
+              ];
               watchNewPosts(watchedState);
             })
             .catch(() => {
