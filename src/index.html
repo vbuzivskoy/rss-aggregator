@@ -14,18 +14,22 @@
         </div>
       </div>
       <h1>RSS Aggregator</h1>
-      <form id="rssFeedForm">
-        <div class="form-group">
-          <input id="inputField" class="form-control" name="feedUrl">
+      <form id="rssFeedForm" class="row">
+        <div class="col">
+          <div class="form-group">
+            <input id="inputField" class="form-control" name="feedUrl">
+          </div>
+          <div id="validationFeedback"></div>
         </div>
-        <div id="validationFeedback"></div>
-        <button id="submitButton" class="btn btn-primary" type="submit" disabled></button>
+        <div class="col-2">
+          <button id="submitButton" class="btn btn-primary" type="submit" disabled></button>
+        </div>
       </form>
     </div>
     <div class="container">
       <div class="row">
-        <div id="rssChannels" class="col-sm"></div>
-        <div id="rssPosts" class="col-sm"></div>
+        <div id="rssChannels" class="col"></div>
+        <div id="rssPosts" class="col"></div>
       </div>
     </div>
   </body>
