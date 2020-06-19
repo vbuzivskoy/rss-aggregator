@@ -42,9 +42,9 @@ export const renderSubmitButtonValue = (value) => {
 export const renderInputField = (validationStatus) => {
   const inputField = document.querySelector('#inputField');
   if (validationStatus === 'invalid') {
-    inputField.classList.add('invaild');
+    inputField.classList.add('is-invalid');
   } else {
-    inputField.classList.remove('invaild');
+    inputField.classList.remove('is-invalid');
   }
 };
 

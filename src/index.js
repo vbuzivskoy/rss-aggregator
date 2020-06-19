@@ -1,6 +1,5 @@
-import 'bootstrap/js/dist/dropdown';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/main.css';
+import 'bootstrap/dist/js/bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 import app from './app';
 
 app();
