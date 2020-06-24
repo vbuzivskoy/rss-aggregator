@@ -4,22 +4,22 @@ export default (rssSource) => {
   const channelTitleElement = doc.querySelector('rss>channel>title');
   const channelDescriptionElement = doc.querySelector('rss>channel>description');
   const channelLinkElement = doc.querySelector('rss>channel>link');
-  if (channelTitleElement && channelDescriptionElement && channelLinkElement) {
-    const postElmenets = [...doc.querySelectorAll('rss>channel>item')];
-    const rssData = {
-      channel: {
-        title: channelTitleElement.textContent,
-        description: channelDescriptionElement.textContent,
-      },
-      posts: postElmenets.map((item) => (
-        {
-          title: item.querySelector('title').textContent,
-          link: item.querySelector('link').textContent,
-          guid: item.querySelector('guid').textContent,
-        }
-      )),
-    };
-    return rssData;
+  if (!(channelTitleElement && channelDescriptionElement && channelLinkElement)) {
+    throw new Error('Invalid rss xml format');
   }
-  return null;
+  const postElmenets = [...doc.querySelectorAll('rss>channel>item')];
+  const rssData = {
+    channel: {
+      title: channelTitleElement.textContent,
+      description: channelDescriptionElement.textContent,
+    },
+    posts: postElmenets.map((item) => (
+      {
+        title: item.querySelector('title').textContent,
+        link: item.querySelector('link').textContent,
+        guid: item.querySelector('guid').textContent,
+      }
+    )),
+  };
+  return rssData;
 };
