@@ -9,7 +9,7 @@ devstart:
 builddev:
 	NODE_ENV=development npx webpack
 
-buildprod:
+build:
 	NODE_ENV=production npx webpack
 
 lint:
