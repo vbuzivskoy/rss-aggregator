@@ -4,12 +4,12 @@ install-deps:
 	npm ci
 
 devstart:
-	npx webpack-dev-server --mode development --open
+	npm run dev
 
-dev:
+builddev:
 	NODE_ENV=development npx webpack
 
-build:
+buildprod:
 	NODE_ENV=production npx webpack
 
 lint:
