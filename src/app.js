@@ -43,15 +43,15 @@ const watchNewRssPosts = (ws) => {
 export const saveRssChannel = (feedUrl, ws) => {
   const watchedState = ws;
   return getRssFeed(feedUrl)
-    .then((response) => (
-      parseRssFeed(response.data)
-    )).then((parsedRssFeedData) => {
+    .then((response) => parseRssFeed(response.data))
+    .then((parsedRssFeedData) => {
       watchedState.rssFeedForm.state = 'initial';
       watchedState.rssChannels = [
         { ...parsedRssFeedData.channel, channelUrl: feedUrl },
         ...watchedState.rssChannels,
       ];
-    }).catch((error) => {
+    })
+    .catch((error) => {
       watchedState.rssFeedForm.state = 'processingFailed';
       watchedState.rssFeedForm.validationErrors = error.request instanceof XMLHttpRequest ? ['networkError'] : ['parserError'];
       throw error;
@@ -75,58 +75,58 @@ const app = () => {
       en,
       ru,
     },
-  }).then(() => (
-    watchState(state)
-  )).then((ws) => {
-    const watchedState = ws;
-    const rssFeedForm = document.querySelector('#rssFeedForm');
-    const localeDropdownMenu = document.querySelector('#localeDropdownMenu');
+  })
+    .then(() => watchState(state))
+    .then((ws) => {
+      const watchedState = ws;
+      const rssFeedForm = document.querySelector('#rssFeedForm');
+      const localeDropdownMenu = document.querySelector('#localeDropdownMenu');
 
-    const formValidationSchema = yup.object().shape({
-      feedUrl: yup.string()
-        .url('notURL')
-        .required('notEmpty')
-        .test(
-          'uniq',
-          'notUniq',
-          function test(value) {
-            return !this.options.context.includes(value);
-          },
-        ),
-    });
+      const formValidationSchema = yup.object().shape({
+        feedUrl: yup.string()
+          .url('notURL')
+          .required('notEmpty')
+          .test(
+            'uniq',
+            'notUniq',
+            function test(value) {
+              return !this.options.context.includes(value);
+            },
+          ),
+      });
 
-    rssFeedForm.addEventListener('input', (event) => {
-      const formData = new FormData(event.currentTarget);
-      const feedUrl = formData.get('feedUrl');
-      formValidationSchema.validate(
-        { feedUrl },
-        { context: state.rssChannels.map(({ channelUrl }) => channelUrl) },
-      )
-        .then(() => {
-          watchedState.rssFeedForm.state = 'filling';
-          watchedState.rssFeedForm.validationErrors = [];
-        })
-        .catch(({ errors }) => {
-          watchedState.rssFeedForm.state = 'fillingWithErrors';
-          watchedState.rssFeedForm.validationErrors = errors;
-        });
-    });
+      rssFeedForm.addEventListener('input', (event) => {
+        const formData = new FormData(event.currentTarget);
+        const feedUrl = formData.get('feedUrl');
+        formValidationSchema.validate(
+          { feedUrl },
+          { context: state.rssChannels.map(({ channelUrl }) => channelUrl) },
+        )
+          .then(() => {
+            watchedState.rssFeedForm.state = 'filling';
+            watchedState.rssFeedForm.validationErrors = [];
+          })
+          .catch(({ errors }) => {
+            watchedState.rssFeedForm.state = 'fillingWithErrors';
+            watchedState.rssFeedForm.validationErrors = errors;
+          });
+      });
 
-    rssFeedForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      watchedState.rssFeedForm.state = 'processing';
-      const formData = new FormData(event.target);
-      const feedUrl = formData.get('feedUrl');
-      saveRssChannel(feedUrl, watchedState)
-        .then(() => saveNewPosts(watchedState))
-        .then(() => watchNewRssPosts(watchedState));
-    });
+      rssFeedForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        watchedState.rssFeedForm.state = 'processing';
+        const formData = new FormData(event.target);
+        const feedUrl = formData.get('feedUrl');
+        saveRssChannel(feedUrl, watchedState)
+          .then(() => saveNewPosts(watchedState))
+          .then(() => watchNewRssPosts(watchedState));
+      });
 
-    localeDropdownMenu.addEventListener('click', (event) => {
-      event.preventDefault();
-      watchedState.currentLocale = event.target.textContent;
+      localeDropdownMenu.addEventListener('click', (event) => {
+        event.preventDefault();
+        watchedState.currentLocale = event.target.textContent;
+      });
     });
-  });
 };
 
 export default app;
