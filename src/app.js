@@ -28,9 +28,7 @@ export const saveNewPosts = (ws) => {
           ...watchedState.rssPosts,
         ];
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => console.error(error))
   ));
   return Promise.all(promises);
 };
@@ -120,10 +118,8 @@ const app = () => {
       const formData = new FormData(event.target);
       const feedUrl = formData.get('feedUrl');
       saveRssChannel(feedUrl, watchedState)
-        .then(() => {
-          saveNewPosts(watchedState);
-          watchNewRssPosts(watchedState);
-        });
+        .then(() => saveNewPosts(watchedState))
+        .then(() => watchNewRssPosts(watchedState));
     });
 
     localeDropdownMenu.addEventListener('click', (event) => {
