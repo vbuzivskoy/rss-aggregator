@@ -4,4 +4,6 @@ module.exports = {
       targets: '> 3%, not dead',
     }],
   ],
+  sourceMaps: 'inline',
+  retainLines: true,
 };
