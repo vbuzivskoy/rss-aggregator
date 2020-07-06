@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" 
+  xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+  xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title><![CDATA[Lorem ipsum feed for an interval of 2 seconds with 5 item(s)]]></title>
+    <description><![CDATA[This is a constantly updating lorem ipsum feed]]></description>
+    <link>http://example.com/</link>
+    <generator>RSS for Node</generator>
+    <lastBuildDate>Thu, 02 Jul 2020 10:46:20 GMT</lastBuildDate>
+    <pubDate>Thu, 02 Jul 2020 10:46:20 GMT</pubDate>
+    <copyright><![CDATA[Michael Bertolacci, licensed under a Creative Commons Attribution 3.0 Unported License.]]></copyright>
+    <ttl>1</ttl>
+    <item>
+      <title><![CDATA[Lorem ipsum 2020-07-02T10:46:20Z]]></title>
+      <description><![CDATA[Adipisicing excepteur proident consequat fugiat et deserunt.]]></description>
+      <link>http://example.com/test/1593686780</link>
+      <guid isPermaLink="true">http://example.com/test/1593686780</guid>
+      <dc:creator><![CDATA[John Smith]]></dc:creator>
+      <pubDate>Thu, 02 Jul 2020 10:46:20 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Lorem ipsum 2020-07-02T10:46:18Z]]></title>
+      <description><![CDATA[Deserunt do quis sunt irure do commodo.]]></description>
+      <link>http://example.com/test/1593686778</link>
+      <guid isPermaLink="true">http://example.com/test/1593686778</guid>
+      <dc:creator><![CDATA[John Smith]]></dc:creator>
+      <pubDate>Thu, 02 Jul 2020 10:46:18 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Lorem ipsum 2020-07-02T10:46:16Z]]></title>
+      <description><![CDATA[Exercitation exercitation exercitation excepteur mollit duis mollit cupidatat anim nulla minim in laborum quis.]]></description>
+      <link>http://example.com/test/1593686776</link>
+      <guid isPermaLink="true">http://example.com/test/1593686776</guid>
+      <dc:creator><![CDATA[John Smith]]></dc:creator>
+      <pubDate>Thu, 02 Jul 2020 10:46:16 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Lorem ipsum 2020-07-02T10:46:14Z]]></title>
+      <description><![CDATA[In exercitation adipisicing commodo proident ut dolore minim anim excepteur consectetur velit.]]></description>
+      <link>http://example.com/test/1593686774</link>
+      <guid isPermaLink="true">http://example.com/test/1593686774</guid>
+      <dc:creator><![CDATA[John Smith]]></dc:creator>
+      <pubDate>Thu, 02 Jul 2020 10:46:14 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Lorem ipsum 2020-07-02T10:46:12Z]]></title>
+      <description><![CDATA[Commodo ipsum proident in velit aute sunt.]]></description>
+      <link>http://example.com/test/1593686772</link>
+      <guid isPermaLink="true">http://example.com/test/1593686772</guid>
+      <dc:creator><![CDATA[John Smith]]></dc:creator>
+      <pubDate>Thu, 02 Jul 2020 10:46:12 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
