@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import parseRssFeed from '../src/parseRssFeed';
 
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
 const readFixture = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 describe('parseRssFeed tests', () => {
