@@ -40,7 +40,7 @@ export const renderSubmitButton = (submitButtonStatus) => {
   const submitButton = document.querySelector('#submitButton');
   switch (submitButtonStatus) {
     case 'disabled':
-      submitButton.setAttribute('disabled', 'disabled');
+      submitButton.setAttribute('disabled', '');
       break;
     case 'enabled':
       submitButton.removeAttribute('disabled');
