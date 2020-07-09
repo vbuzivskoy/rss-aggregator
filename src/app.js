@@ -2,11 +2,15 @@ import axios from 'axios';
 import i18next from 'i18next';
 import * as yup from 'yup';
 import once from 'lodash/once';
+import flatten from 'lodash/flatten';
+import uniqWith from 'lodash/uniqWith';
 import differenceWith from 'lodash/differenceWith';
 import parseRssFeed from './parseRssFeed';
 import watchState from './watchers';
 import en from './locales/en';
 import ru from './locales/ru';
+
+const compareRssPosts = (postA, postB) => postA.guid === postB.guid;
 
 const getRssFeed = (rssFeedUrl) => {
   const proxyHost = 'cors-anywhere.herokuapp.com';
@@ -21,16 +25,18 @@ const saveNewPosts = (watchedState) => {
         const newPosts = differenceWith(
           parsedRssFeedData.posts,
           watchedState.rssPosts,
-          (postA, postB) => postA.guid === postB.guid,
+          compareRssPosts,
         );
-        watchedState.rssPosts = [ // eslint-disable-line no-param-reassign
-          ...newPosts,
-          ...watchedState.rssPosts,
-        ];
+        return newPosts;
       })
       .catch((error) => console.error(error))
   ));
-  return Promise.all(promises);
+  return Promise.all(promises)
+    .then((newPosts) => {
+      const posts = uniqWith(flatten(newPosts), compareRssPosts);
+      // eslint-disable-next-line no-param-reassign
+      watchedState.rssPosts.unshift(...posts);
+    });
 };
 
 const watchNewRssPosts = (watchedState) => {
