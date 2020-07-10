@@ -9,24 +9,14 @@ describe('parseRssFeed tests', () => {
   test('parseRssFeed valid xml', () => {
     const expectedRssData = {
       channel: {
-        title: 'Lorem ipsum feed for an interval of 1 minutes with 3 items',
-        description: 'This is a constantly updating lorem ipsum feed',
+        title: 'Valid rss xml format test',
+        description: 'For valid rss xml format test',
       },
       posts: [
         {
-          guid: 'http://example.com/test/1591780500',
-          title: 'Lorem ipsum 2020-06-10T09:15:00Z',
-          link: 'http://example.com/test/1591780500',
-        },
-        {
-          guid: 'http://example.com/test/1591780440',
-          title: 'Lorem ipsum 2020-06-10T09:14:00Z',
-          link: 'http://example.com/test/1591780440',
-        },
-        {
-          guid: 'http://example.com/test/1591780380',
-          title: 'Lorem ipsum 2020-06-10T09:13:00Z',
-          link: 'http://example.com/test/1591780380',
+          guid: 'http://example.com/test/1',
+          title: 'Post 1',
+          link: 'http://example.com/test/1',
         },
       ],
     };

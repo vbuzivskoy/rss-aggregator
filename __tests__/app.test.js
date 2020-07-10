@@ -2,164 +2,112 @@ import fs from 'fs';
 import path from 'path';
 import nock from 'nock';
 import axios from 'axios';
-import { waitFor, getByPlaceholderText, getByText } from '@testing-library/dom';
-import { toBeInTheDocument, toBeEnabled } from '@testing-library/jest-dom/matchers';
+import httpAdapter from 'axios/lib/adapters/http';
+import { screen, waitFor } from '@testing-library/dom';
+import { toBeEnabled, toBeInTheDocument, toBeVisible } from '@testing-library/jest-dom/matchers';
 import userEvent from '@testing-library/user-event';
-import prettier from 'prettier';
 import app from '../src/app';
 
 debugger; // eslint-disable-line no-debugger
 
-expect.extend({ toBeInTheDocument, toBeEnabled });
+expect.extend({ toBeEnabled, toBeInTheDocument, toBeVisible });
 
-axios.defaults.adapter = require('axios/lib/adapters/http');
+axios.defaults.adapter = httpAdapter;
 
 nock.disableNetConnect();
 
 const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
 const getSourcePath = (filename) => path.join(__dirname, '..', 'src', filename);
 const readFixture = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
-const copyFixture = (filename) => (
-  fs.copyFileSync(getSourcePath(filename), getFixturePath(filename))
-);
-const removeFixture = (filename) => (
-  fs.unlinkSync(getFixturePath(filename))
-);
+const readSource = (filename) => fs.readFileSync(getSourcePath(filename), 'utf-8');
 
-const prettierOptions = {
-  parser: 'html',
-  htmlWhitespaceSensitivity: 'ignore',
-  tabWidth: 4,
-};
-const getTree = () => prettier.format(document.body.innerHTML, prettierOptions);
 
 const proxyHost = 'https://cors-anywhere.herokuapp.com';
-const wrongUrl = 'htp://lorem-rss.herokuapp.com/feed';
-const rssFeedUrl1sec = 'http://lorem-rss.herokuapp.com/feed?length=5&unit=second&interval=1';
-const rssFeedUrl2sec = 'http://lorem-rss.herokuapp.com/feed?length=5&unit=second&interval=2';
-const rssXml1sec1 = readFixture('rss1sec1.xml');
-const rssXml2sec1 = readFixture('rss2sec1.xml');
-const rssXml2sec2 = readFixture('rss2sec2.xml');
+const wrongUrl = 'http:/example.com/test1';
+const rssFeed1Url = 'http://example.com/test1';
+const rssFeed2Url = 'http://example.com/test2';
+const rss11Xml = readFixture('rss1_1.xml');
+const rss12Xml = readFixture('rss1_2.xml');
+const rss2Xml = readFixture('rss2.xml');
 let elements;
+let rssPostTitles;
 
-beforeAll(() => copyFixture('index.html'));
-afterAll(() => removeFixture('index.html'));
-
-beforeEach(() => {
-  const initHtml = readFixture('index.html');
-  document.documentElement.innerHTML = initHtml;
-  return app()
-    .then(() => {
-      elements = {
-        input: getByPlaceholderText(document.body, 'RSS link'),
-        button: getByText(document.body, 'Add'),
-      };
-    });
+beforeEach(async () => {
+  const initHtml = readSource('index.html');
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(initHtml, 'text/html');
+  document.body.innerHTML = doc.body.innerHTML;
+  await app();
+  elements = {
+    input: screen.getByPlaceholderText('RSS link'),
+    button: screen.getByRole('button', { name: 'Add' }),
+    localeMenuButton: screen.getByRole('button', { name: 'en' }),
+    ruLocaleLink: screen.getByRole('link', { name: 'ru' }),
+  };
 });
 
-test('Wrong url test', () => {
-  userEvent.paste(elements.input, wrongUrl);
-  return waitFor(() => {
-    const validationFeedback = getByText(document.body, 'The field should contains valid URL');
+test('Wrong url test', async () => {
+  userEvent.type(elements.input, wrongUrl);
+  await waitFor(() => {
+    const validationFeedback = screen.getByText('The field should contains valid URL');
     expect(validationFeedback).toBeInTheDocument();
   });
 });
 
-test('Empty url test', () => {
+test('Empty url test', async () => {
   userEvent.paste(elements.input, wrongUrl);
-  return waitFor(() => {
-    const validationFeedback = getByText(document.body, 'The field should contains valid URL');
+  userEvent.clear(elements.input);
+  await waitFor(() => {
+    const validationFeedback = screen.getByText('The field should not be empty');
     expect(validationFeedback).toBeInTheDocument();
-    userEvent.clear(elements.input);
-  })
-    .then(() => (
-      waitFor(() => {
-        const validationFeedback = getByText(document.body, 'The field should not be empty');
-        expect(validationFeedback).toBeInTheDocument();
-      })
-    ));
+  });
 });
 
-test('One rss feed test', () => {
-  expect(getTree()).toMatchSnapshot();
+test('Two rss feed test', async () => {
   nock(proxyHost)
-    .get(`/${rssFeedUrl2sec}`)
+    .get(`/${rssFeed1Url}`)
     .twice()
-    .reply(200, rssXml2sec1);
-
-  userEvent.paste(elements.input, rssFeedUrl2sec);
-  return waitFor(() => {
+    .reply(200, rss11Xml);
+  userEvent.paste(elements.input, rssFeed1Url);
+  await waitFor(() => {
     expect(elements.button).toBeEnabled();
-  })
-    .then(() => {
-      userEvent.click(elements.button);
-    })
-    .then(() => waitFor(() => {
-      const text = getByText(document.body, 'Lorem ipsum 2020-07-02T10:46:16Z');
-      expect(text).toBeInTheDocument();
-      expect(getTree()).toMatchSnapshot();
-    }))
-    .then(() => {
-      nock(proxyHost)
-        .get(`/${rssFeedUrl2sec}`)
-        .once()
-        .reply(200, rssXml2sec2);
-    })
-    .then(() => waitFor(() => {
-      const text = getByText(document.body, 'Lorem ipsum 2020-07-02T10:46:20Z');
-      expect(text).toBeInTheDocument();
-      expect(getTree()).toMatchSnapshot();
-    }, { timeout: 6000 }));
-}, 10000);
-
-test('Two rss feed test', () => {
-  expect(getTree()).toMatchSnapshot();
+  });
+  userEvent.click(elements.button);
+  await waitFor(() => {
+    rssPostTitles = screen.getAllByText(/^Post \d$/);
+    expect(rssPostTitles.length).toEqual(3);
+  });
   nock(proxyHost)
-    .get(`/${rssFeedUrl2sec}`)
+    .get(`/${rssFeed1Url}`)
     .twice()
-    .reply(200, rssXml2sec1);
-
-  userEvent.paste(elements.input, rssFeedUrl2sec);
-  return waitFor(() => {
+    .reply(200, rss12Xml);
+  await waitFor(() => {
+    rssPostTitles = screen.getAllByText(/^Post \d$/);
+    expect(rssPostTitles.length).toEqual(4);
+  }, { timeout: 6000 });
+  nock(proxyHost)
+    .get(`/${rssFeed2Url}`)
+    .twice()
+    .reply(200, rss2Xml);
+  userEvent.paste(elements.input, rssFeed2Url);
+  await waitFor(() => {
     expect(elements.button).toBeEnabled();
-  })
-    .then(() => {
-      userEvent.click(elements.button);
-    })
-    .then(() => waitFor(() => {
-      const text = getByText(document.body, 'Lorem ipsum 2020-07-02T10:46:16Z');
-      expect(text).toBeInTheDocument();
-      expect(getTree()).toMatchSnapshot();
-    }))
-    .then(() => {
-      nock(proxyHost)
-        .get(`/${rssFeedUrl2sec}`)
-        .twice()
-        .reply(200, rssXml2sec2);
-    })
-    .then(() => waitFor(() => {
-      const text = getByText(document.body, 'Lorem ipsum 2020-07-02T10:46:20Z');
-      expect(text).toBeInTheDocument();
-      expect(getTree()).toMatchSnapshot();
-    }, { timeout: 6000 }))
-    .then(() => {
-      nock(proxyHost)
-        .get(`/${rssFeedUrl1sec}`)
-        .twice()
-        .reply(200, rssXml1sec1);
-    })
-    .then(() => {
-      userEvent.paste(elements.input, rssFeedUrl1sec);
-    })
-    .then(() => waitFor(() => {
-      expect(elements.button).toBeEnabled();
-    }))
-    .then(() => {
-      userEvent.click(elements.button);
-    })
-    .then(() => waitFor(() => {
-      const text = getByText(document.body, 'Lorem ipsum 2020-07-02T10:46:21Z');
-      expect(text).toBeInTheDocument();
-      expect(getTree()).toMatchSnapshot();
-    }, { timeout: 6000 }));
-}, 13000);
+  });
+  userEvent.click(elements.button);
+  await waitFor(() => {
+    rssPostTitles = screen.getAllByText(/^Post \d$/);
+    expect(rssPostTitles.length).toEqual(5);
+  }, { timeout: 6000 });
+}, 12000);
+
+test('Locale change test', async () => {
+  userEvent.click(elements.localeMenuButton);
+  await waitFor(() => {
+    expect(elements.ruLocaleLink).toBeVisible();
+  });
+  userEvent.click(elements.ruLocaleLink);
+  await waitFor(() => {
+    const appTitle = screen.getByText('RSS агрегатор');
+    expect(appTitle).toBeInTheDocument();
+  });
+});
