@@ -3,36 +3,12 @@
   xmlns:content="http://purl.org/rss/1.0/modules/content/" 
   xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
-    <title><![CDATA[Lorem ipsum feed for an interval of 1 minutes with 3 items]]></title>
-    <description><![CDATA[This is a constantly updating lorem ipsum feed]]></description>
-    <generator>RSS for Node</generator>
-    <lastBuildDate>Wed, 10 Jun 2020 09:15:44 GMT</lastBuildDate>
-    <pubDate>Wed, 10 Jun 2020 09:15:00 GMT</pubDate>
-    <copyright><![CDATA[Michael Bertolacci, licensed under a Creative Commons Attribution 3.0 Unported License.]]></copyright>
-    <ttl>1</ttl>
+    <title><![CDATA[Invalid rss xml format test]]></title>
     <item>
-      <title><![CDATA[Lorem ipsum 2020-06-10T09:15:00Z]]></title>
-      <description><![CDATA[Dolore aute aliqua sit labore officia dolor occaecat labore anim nostrud et qui veniam reprehenderit.]]></description>
-      <link>http://example.com/test/1591780500</link>
-      <guid isPermaLink="true">http://example.com/test/1591780500</guid>
-      <dc:creator><![CDATA[John Smith]]></dc:creator>
-      <pubDate>Wed, 10 Jun 2020 09:15:00 GMT</pubDate>
-    </item>
-    <item>
-      <title><![CDATA[Lorem ipsum 2020-06-10T09:14:00Z]]></title>
-      <description><![CDATA[Incididunt culpa nulla commodo reprehenderit.]]></description>
-      <link>http://example.com/test/1591780440</link>
-      <guid isPermaLink="true">http://example.com/test/1591780440</guid>
-      <dc:creator><![CDATA[John Smith]]></dc:creator>
-      <pubDate>Wed, 10 Jun 2020 09:14:00 GMT</pubDate>
-    </item>
-    <item>
-      <title><![CDATA[Lorem ipsum 2020-06-10T09:13:00Z]]></title>
-      <description><![CDATA[Elit quis commodo ea Lorem eu excepteur ex consectetur est ad ea ut do.]]></description>
-      <link>http://example.com/test/1591780380</link>
-      <guid isPermaLink="true">http://example.com/test/1591780380</guid>
-      <dc:creator><![CDATA[John Smith]]></dc:creator>
-      <pubDate>Wed, 10 Jun 2020 09:13:00 GMT</pubDate>
+      <title><![CDATA[Post 1]]></title>
+      <description><![CDATA[Description for post 1]]></description>
+      <link>http://example.com/test/1</link>
+      <guid isPermaLink="true">http://example.com/test/1</guid>
     </item>
   </channel>
 </rss>

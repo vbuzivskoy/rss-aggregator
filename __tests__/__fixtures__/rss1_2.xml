@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" 
+  xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+  xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title><![CDATA[Test 1]]></title>
+    <description><![CDATA[For test 1]]></description>
+    <item>
+      <title><![CDATA[Post 1]]></title>
+      <description><![CDATA[Description for post 1]]></description>
+      <link>http://example.com/test/1</link>
+      <guid isPermaLink="true">http://example.com/test/1</guid>
+    </item>
+    <item>
+      <title><![CDATA[Post 2]]></title>
+      <description><![CDATA[Description for post 2]]></description>
+      <link>http://example.com/test/2</link>
+      <guid isPermaLink="true">http://example.com/test/2</guid>
+    </item>
+    <item>
+      <title><![CDATA[Post 3]]></title>
+      <description><![CDATA[Description for post 3]]></description>
+      <link>http://example.com/test/3</link>
+      <guid isPermaLink="true">http://example.com/test/3</guid>
+    </item>
+    <item>
+      <title><![CDATA[Post 4]]></title>
+      <description><![CDATA[Description for post 4]]></description>
+      <link>http://example.com/test/4</link>
+      <guid isPermaLink="true">http://example.com/test/4</guid>
+    </item>
+  </channel>
+</rss>
