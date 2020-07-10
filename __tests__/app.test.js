@@ -101,13 +101,15 @@ test('Two rss feed test', async () => {
 }, 12000);
 
 test('Locale change test', async () => {
+  let appTitle = screen.queryByText('RSS агрегатор');
+  expect(appTitle).not.toBeInTheDocument();
   userEvent.click(elements.localeMenuButton);
   await waitFor(() => {
     expect(elements.ruLocaleLink).toBeVisible();
   });
   userEvent.click(elements.ruLocaleLink);
   await waitFor(() => {
-    const appTitle = screen.getByText('RSS агрегатор');
+    appTitle = screen.getByText('RSS агрегатор');
     expect(appTitle).toBeInTheDocument();
   });
 });
