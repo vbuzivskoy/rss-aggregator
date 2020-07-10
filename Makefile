@@ -6,6 +6,9 @@ install-deps:
 devstart:
 	npm run dev
 
+dev-server:
+	npx webpack-dev-server --mode development --open
+
 builddev:
 	NODE_ENV=development npx webpack
 
