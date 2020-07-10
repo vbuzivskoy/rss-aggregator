@@ -47,18 +47,24 @@ beforeEach(async () => {
 });
 
 test('Wrong url test', async () => {
+  const errorText = 'The field should contains valid URL';
+  let validationFeedback = screen.queryByText(errorText);
+  expect(validationFeedback).not.toBeInTheDocument();
   userEvent.type(elements.input, wrongUrl);
   await waitFor(() => {
-    const validationFeedback = screen.getByText('The field should contains valid URL');
+    validationFeedback = screen.getByText(errorText);
     expect(validationFeedback).toBeInTheDocument();
   });
 });
 
 test('Empty url test', async () => {
+  const errorText = 'The field should not be empty';
+  let validationFeedback = screen.queryByText(errorText);
+  expect(validationFeedback).not.toBeInTheDocument();
   userEvent.paste(elements.input, wrongUrl);
   userEvent.clear(elements.input);
   await waitFor(() => {
-    const validationFeedback = screen.getByText('The field should not be empty');
+    validationFeedback = screen.getByText(errorText);
     expect(validationFeedback).toBeInTheDocument();
   });
 });
@@ -101,7 +107,8 @@ test('Two rss feed test', async () => {
 }, 12000);
 
 test('Locale change test', async () => {
-  let appTitle = screen.queryByText('RSS агрегатор');
+  const appTitleText = 'RSS агрегатор';
+  let appTitle = screen.queryByText(appTitleText);
   expect(appTitle).not.toBeInTheDocument();
   userEvent.click(elements.localeMenuButton);
   await waitFor(() => {
@@ -109,7 +116,7 @@ test('Locale change test', async () => {
   });
   userEvent.click(elements.ruLocaleLink);
   await waitFor(() => {
-    appTitle = screen.getByText('RSS агрегатор');
+    appTitle = screen.getByText(appTitleText);
     expect(appTitle).toBeInTheDocument();
   });
 });
