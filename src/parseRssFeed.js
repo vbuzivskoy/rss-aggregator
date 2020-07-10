@@ -3,8 +3,7 @@ export default (rssSource) => {
   const doc = parser.parseFromString(rssSource, 'application/xml');
   const channelTitleElement = doc.querySelector('rss>channel>title');
   const channelDescriptionElement = doc.querySelector('rss>channel>description');
-  const channelLinkElement = doc.querySelector('rss>channel>link');
-  if (!(channelTitleElement && channelDescriptionElement && channelLinkElement)) {
+  if (!(channelTitleElement && channelDescriptionElement)) {
     throw new Error('Invalid rss xml format');
   }
   const postElmenets = [...doc.querySelectorAll('rss>channel>item')];
