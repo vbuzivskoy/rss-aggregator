@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import i18next from 'i18next';
 import * as yup from 'yup';
@@ -34,7 +35,6 @@ const saveNewPosts = (watchedState) => {
   return Promise.all(promises)
     .then((newPosts) => {
       const posts = uniqWith(flatten(newPosts), compareRssPosts);
-      // eslint-disable-next-line no-param-reassign
       watchedState.rssPosts.unshift(...posts);
     });
 };
@@ -47,30 +47,29 @@ const watchNewRssPosts = (watchedState) => {
 };
 
 const saveRssChannel = (feedUrl, watchedState) => {
-  watchedState.rssFeedFormState = 'processing'; // eslint-disable-line no-param-reassign
+  watchedState.rssFeedFormState = 'processing';
   return getRssFeed(feedUrl)
     .then((response) => parseRssFeed(response.data))
     .then((parsedRssFeedData) => {
-      watchedState.rssFeedFormState = 'initial'; // eslint-disable-line no-param-reassign
-      watchedState.rssChannels = [ // eslint-disable-line no-param-reassign
+      watchedState.rssFeedFormState = 'initial';
+      watchedState.rssChannels = [
         { ...parsedRssFeedData.channel, channelUrl: feedUrl },
         ...watchedState.rssChannels,
       ];
     })
     .catch((error) => {
-      watchedState.rssFeedFormState = 'processingFailed'; // eslint-disable-line no-param-reassign
-      // eslint-disable-next-line no-param-reassign
+      watchedState.rssFeedFormState = 'processingFailed';
       watchedState.validationErrors = error.request instanceof XMLHttpRequest ? ['networkError'] : ['parserError'];
       throw error;
     });
 };
 
-const validateRssUrl = (feedUrl, watchedState) => {
+const validateRssUrl = (feedUrl, rssChannels) => {
   const formValidationSchema = yup.object().shape({
     feedUrl: yup.string()
       .url('notURL')
       .required('notEmpty')
-      .notOneOf(watchedState.rssChannels.map(({ channelUrl }) => channelUrl), 'notUniq'),
+      .notOneOf(rssChannels.map(({ channelUrl }) => channelUrl), 'notUniq'),
   });
   return formValidationSchema.validate(
     { feedUrl },
@@ -103,14 +102,13 @@ const app = () => {
       rssFeedForm.addEventListener('input', (event) => {
         const formData = new FormData(event.currentTarget);
         const feedUrl = formData.get('feedUrl');
-        validateRssUrl(feedUrl, watchedState)
+        validateRssUrl(feedUrl, watchedState.rssChannels)
           .then(() => {
-            watchedState.rssFeedFormState = 'filling'; // eslint-disable-line no-param-reassign
-            watchedState.validationErrors = []; // eslint-disable-line no-param-reassign
+            watchedState.rssFeedFormState = 'filling';
+            watchedState.validationErrors = [];
           })
           .catch(({ errors }) => {
-            watchedState.rssFeedFormState = 'fillingWithErrors'; // eslint-disable-line no-param-reassign
-            // eslint-disable-next-line no-param-reassign
+            watchedState.rssFeedFormState = 'fillingWithErrors';
             watchedState.validationErrors = errors;
           });
       });
@@ -126,7 +124,6 @@ const app = () => {
 
       localeDropdownMenu.addEventListener('click', (event) => {
         event.preventDefault();
-        // eslint-disable-next-line no-param-reassign
         watchedState.currentLocale = event.target.textContent;
       });
     });
