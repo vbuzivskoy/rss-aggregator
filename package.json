@@ -21,7 +21,7 @@
   "homepage": "https://github.com/vbuzivskoy/frontend-project-lvl3#readme",
   "dependencies": {
     "@babel/polyfill": "^7.10.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootstrap": "^4.5.0",
     "i18next": "^19.4.5",
     "jquery": "^3.5.1",
